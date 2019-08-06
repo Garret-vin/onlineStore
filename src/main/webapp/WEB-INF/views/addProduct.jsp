@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -6,12 +7,26 @@
 </head>
 <body>
 
-<form action="/admin/add/product" method="post">
-    Название <input type="text" name="name"> <br>
-    Описание <input type="text" name="description"> <br>
-    Цена <input type="number" step="0.01" min="0" placeholder="0,00" name="price"> <br>
-    <input type="submit" value="Добавить товар"></form>
-</form>
+<form:form action="/admin/add/product"
+           method="post" modelAttribute="product">
+    <table>
+        <tr>
+            <td>Name</td>
+            <td><form:input path="name"/></td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td><form:input path="description"/></td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td><form:input path="price"/></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Подтвердить"></td>
+        </tr>
+    </table>
+</form:form>
 
 <button><a href="/admin/products">Вернуться</a></button>
 

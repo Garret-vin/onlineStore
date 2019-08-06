@@ -45,12 +45,6 @@ public class Basket {
         this.productList = new ArrayList<>();
     }
 
-    public Basket(Long id, User user, List<Product> productList) {
-        this.id = id;
-        this.user = user;
-        this.productList = productList;
-    }
-
     public Long getId() {
         return id;
     }

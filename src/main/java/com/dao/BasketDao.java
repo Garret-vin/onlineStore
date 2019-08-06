@@ -12,7 +12,5 @@ public interface BasketDao {
 
     void addProduct(Basket basket, Product product);
 
-    int size(Basket basket);
-
     Optional<Basket> getBasketByUser(User user);
 }

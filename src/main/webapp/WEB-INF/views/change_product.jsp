@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -8,13 +9,29 @@
 
 ${error}
 
-<form action="/admin/change/product?id=${productId}" method="post">
-    Название <input type="text" name="name" value="${oldName}"> <br>
-    Описание <input type="text" name="description" value="${oldDescription}"> <br>
-    Цена <input type="number" step="0.01" min="0" placeholder="0,00" name="price" value="${oldPrice}">
-    <br>
-    <input type="submit" value="Изменить товар"></form>
-</form>
+<form:form action="/admin/change/product"
+           method="post" modelAttribute="product">
+    <table>
+        <tr>
+            <td><form:hidden path="id"/></td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td><form:input path="name"/></td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td><form:input path="description"/></td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td><form:input path="price"/></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Подтвердить"></td>
+        </tr>
+    </table>
+</form:form>
 
 </body>
 </html>

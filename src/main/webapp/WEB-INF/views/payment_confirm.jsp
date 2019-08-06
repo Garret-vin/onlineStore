@@ -14,9 +14,14 @@
 
 ${message}
 
-<form action="/payment/confirm" method="post">
-    Введите пароль<input type="text" name="confirm">
-    <input type="submit" value="Отправить">
+<form action="/user/payment/confirm" method="post">
+    <table>
+        <tr>
+            <td>Введите пароль</td>
+            <td><input type="text" name="confirm"></td>
+            <td><input type="submit" value="Отправить"></td>
+        </tr>
+    </table>
 </form>
 
 <button><a href="/user/products">На главную</a></button>

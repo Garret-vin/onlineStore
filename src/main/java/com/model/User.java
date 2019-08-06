@@ -30,30 +30,25 @@ public class User {
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
+    @Column(name = "confirm_password", length = 255, nullable = false)
+    private String confirmPassword;
+
     @Column(name = "role", length = 20, nullable = false)
     private String role;
 
     @Column(name = "salt", nullable = false)
-    private byte[] salt;
+    private byte[] salt = HashUtil.getRandomSalt();
 
     public User() {
+
     }
 
-    public User(Long id, String login, String email, String password, String role, byte[] salt) {
-        this.id = id;
+    public User(String login, String email, String password, String confirmPassword, String role) {
         this.login = login;
         this.email = email;
         this.password = password;
+        this.confirmPassword = confirmPassword;
         this.role = role;
-        this.salt = salt;
-    }
-
-    public User(String login, String email, String password, String role) {
-        this.email = email;
-        this.login = login;
-        this.password = password;
-        this.role = role;
-        this.salt = HashUtil.getRandomSalt();
     }
 
     public Long getId() {
@@ -88,6 +83,14 @@ public class User {
         this.password = password;
     }
 
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
     public String getRole() {
         return role;
     }
@@ -113,21 +116,24 @@ public class User {
                 Objects.equals(login, user.login) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
+                Objects.equals(confirmPassword, user.confirmPassword) &&
                 Objects.equals(role, user.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, email, password, role);
+        return Objects.hash(id, login, email, password, confirmPassword, role);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

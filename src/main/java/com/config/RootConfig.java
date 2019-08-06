@@ -1,6 +1,5 @@
 package com.config;
 
-import com.model.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +20,15 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScans(value = {
         @ComponentScan("com.dao"),
-        @ComponentScan("com.service")
-})
+        @ComponentScan("com.service")})
 public class RootConfig {
 
-    @Autowired
     private Environment env;
+
+    @Autowired
+    public RootConfig(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public DataSource getDataSource() {
@@ -48,7 +50,7 @@ public class RootConfig {
         props.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
 
         factoryBean.setHibernateProperties(props);
-        factoryBean.setAnnotatedClasses(User.class);
+        factoryBean.setPackagesToScan("com.model");
         return factoryBean;
     }
 

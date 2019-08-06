@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -5,11 +6,26 @@
 </head>
 <body>
 <h1>Создание заказа</h1>
-<form action="/payment" method="post">
-    E-mail <input type="text" name="email" value="${userEmail}"><br>
-    Номер телефона <input type="tel" name="phone" value="+123456789012"><br>
-    Адрес доставки <input type="text" name="address"><br>
-    <input type="submit" value="Подтвердить заказ">
-</form>
+
+<form:form action="/user/payment" method="post" modelAttribute="order">
+    <table border="1">
+        <tr>
+            <td>E-mail:</td>
+            <td><form:input path="email"/></td>
+        </tr>
+        <tr>
+            <td>Номер телефона:</td>
+            <td><form:input path="phoneNumber"/></td>
+        </tr>
+        <tr>
+            <td>Адрес доставки:</td>
+            <td><form:input path="address"/></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Подтвердить заказ"/></td>
+        </tr>
+    </table>
+</form:form>
+
 </body>
 </html>
