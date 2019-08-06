@@ -5,7 +5,7 @@
     <title>Users</title>
 </head>
 <body>
-<button><a href="/admin/add/user">Добавить пользователя</a></button>
+<button><a href="/admin/user/add">Добавить пользователя</a></button>
 
 <table border="1">
     <tr>
@@ -21,16 +21,16 @@
             <td>${user.password}</td>
             <td>${user.role}</td>
             <td>
-                <button><a href="/admin/change/user/${user.id}">Изменить</a></button>
+                <button><a href="/admin/user/change/${user.id}">Изменить</a></button>
             </td>
             <td>
-                <button><a href="/admin/delete/user/${user.id}">Удалить</a></button>
+                <button><a href="/admin/user/delete/${user.id}">Удалить</a></button>
             </td>
         </tr>
     </c:forEach>
 </table>
 <br>
-<button><a href="/admin/products">Товары</a></button>
+<button><a href="/admin/product">Товары</a></button>
 <button><a href="/">Выйти</a></button>
 </body>
 </html>

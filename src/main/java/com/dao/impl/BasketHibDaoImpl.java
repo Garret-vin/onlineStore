@@ -7,10 +7,11 @@ import com.model.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -40,12 +41,17 @@ public class BasketHibDaoImpl implements BasketDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Optional<Basket> getBasketByUser(User user) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Basket where user = :user order by id desc");
+        TypedQuery<Basket> query = session.createQuery(
+                "from Basket where user = :user order by id desc");
         query.setParameter("user", user);
-        query.setMaxResults(1);
-        Basket basket = (Basket) query.uniqueResult();
-        return Optional.ofNullable(basket);
+        List list = query.getResultList();
+        if (list.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of((Basket) list.get(0));
+        }
     }
 }

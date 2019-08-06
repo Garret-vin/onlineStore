@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<form:form action="/admin/add/product"
+<form:form action="/admin/product/add"
            method="post" modelAttribute="product">
     <table>
         <tr>
@@ -28,7 +28,7 @@
     </table>
 </form:form>
 
-<button><a href="/admin/products">Вернуться</a></button>
+<button><a href="/admin/product">Вернуться</a></button>
 
 </body>
 </html>

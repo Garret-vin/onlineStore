@@ -22,7 +22,7 @@
             <td>${product.name}</td>
             <td>${product.description}</td>
             <td>${product.price}</td>
-            <td><a href="/user/buy/product/${product.id}">Купить</a></td>
+            <td><a href="/user/product/buy/${product.id}">Купить</a></td>
         </tr>
     </c:forEach>
 </table>

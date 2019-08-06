@@ -9,7 +9,7 @@
 
 ${error}
 
-<form:form action="/admin/add/user"
+<form:form action="/admin/user/add"
            method="post" modelAttribute="user">
     <table>
         <tr>
@@ -26,7 +26,7 @@ ${error}
         </tr>
         <tr>
             <td>Confirm Password</td>
-            <td><form:password path="confirmPassword"/></td>
+            <td><input type="password" name="confirmPassword"/></td>
         </tr>
         <tr>
             <td>Role</td>
@@ -41,7 +41,7 @@ ${error}
     </table>
 </form:form>
 
-<button><a href="/admin/users">Вернуться</a></button>
+<button><a href="/admin/user">Вернуться</a></button>
 
 </body>
 </html>

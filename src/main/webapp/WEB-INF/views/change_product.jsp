@@ -9,7 +9,7 @@
 
 ${error}
 
-<form:form action="/admin/change/product"
+<form:form action="/admin/product/change"
            method="post" modelAttribute="product">
     <table>
         <tr>

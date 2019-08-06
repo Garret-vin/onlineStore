@@ -6,10 +6,11 @@ import com.model.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -38,12 +39,16 @@ public class OrderHibDaoImpl implements OrderDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Optional<Order> getLastOrderForUser(User user) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Order where user = :user order by id desc");
+        TypedQuery<Order> query = session.createQuery("from Order where user = :user order by id desc");
         query.setParameter("user", user);
-        query.setMaxResults(1);
-        Order order = (Order) query.uniqueResult();
-        return Optional.ofNullable(order);
+        List list = query.getResultList();
+        if (list.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of((Order) list.get(0));
+        }
     }
 }

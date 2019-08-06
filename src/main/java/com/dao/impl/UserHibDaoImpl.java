@@ -6,10 +6,10 @@ import com.util.HashUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +29,6 @@ public class UserHibDaoImpl implements UserDao {
         Session session = sessionFactory.getCurrentSession();
         String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
         user.setPassword(saltedPassword);
-        user.setConfirmPassword(saltedPassword);
         session.save(user);
         logger.info(user + " was added to DB");
     }
@@ -49,7 +48,6 @@ public class UserHibDaoImpl implements UserDao {
         Session session = sessionFactory.getCurrentSession();
         String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
         user.setPassword(saltedPassword);
-        user.setConfirmPassword(saltedPassword);
         session.update(user);
         logger.info(user + " was updated in DB");
     }
@@ -62,11 +60,12 @@ public class UserHibDaoImpl implements UserDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Optional<User> getByLogin(String login) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from User where login = :login");
+        TypedQuery<User> query = session.createQuery("from User where login = :login");
         query.setParameter("login", login);
-        User user = (User) query.uniqueResult();
+        User user = query.getSingleResult();
         return Optional.ofNullable(user);
     }
 
@@ -78,13 +77,18 @@ public class UserHibDaoImpl implements UserDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Optional<User> getByLoginOrEmail(String login, String email) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from User where login = :login OR email = :email");
+        TypedQuery<User> query = session.createQuery(
+                "from User where login = :login OR email = :email");
         query.setParameter("login", login);
         query.setParameter("email", email);
-        query.setMaxResults(1);
-        User user = (User) query.uniqueResult();
-        return Optional.ofNullable(user);
+        List list = query.getResultList();
+        if (list.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of((User) list.get(0));
+        }
     }
 }

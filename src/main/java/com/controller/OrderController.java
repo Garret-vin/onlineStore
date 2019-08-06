@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/user/payment")
 public class OrderController {
 
     private MailService mailService;
@@ -39,16 +39,15 @@ public class OrderController {
         this.basketService = basketService;
     }
 
-    @GetMapping("/payment")
+    @GetMapping
     public ModelAndView showPaymentPage() {
         return new ModelAndView("payment", "order", new Order());
     }
 
-    @PostMapping("/payment")
-    public String createOrder(@ModelAttribute("order") Order order, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    @PostMapping
+    public String createOrder(@ModelAttribute("order") Order order,
+                              @SessionAttribute("user") User user) {
         codeService.add(new Code(user));
-
         Code code = null;
         Optional<Code> optionalCode = codeService.getLastCodeForUser(user);
         if (optionalCode.isPresent()) {
@@ -69,15 +68,15 @@ public class OrderController {
         return "redirect:/user/payment/confirm";
     }
 
-    @GetMapping("/payment/confirm")
+    @GetMapping("/confirm")
     public String showConfirmOrderPage() {
         return "payment_confirm";
     }
 
-    @PostMapping("/payment/confirm")
+    @PostMapping("/confirm")
     public String confirmOrder(@RequestParam("confirm") String confirm,
-                               HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+                               @SessionAttribute("user") User user,
+                               Model model) {
         Optional<Order> optionalOrder = orderService.getLastOrderForUser(user);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();

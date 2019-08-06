@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/user")
 public class UserController {
 
     private UserService userService;
@@ -30,23 +31,24 @@ public class UserController {
         this.basketService = basketService;
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public String showAllUsers(Model model) {
         model.addAttribute("usersList", userService.getAll());
         return "users";
     }
 
-    @GetMapping("/add/user")
+    @GetMapping("/add")
     public ModelAndView showAddUserPage() {
         return new ModelAndView("addUser", "user", new User());
     }
 
-    @PostMapping("/add/user")
-    public ModelAndView addUser(@ModelAttribute("user") User user, ModelMap model) {
+    @PostMapping("/add")
+    public ModelAndView addUser(@ModelAttribute("user") User user,
+                                @RequestParam("confirmPassword") String confirmPassword,
+                                ModelMap model) {
         String email = user.getEmail();
         String login = user.getLogin();
         String password = user.getPassword();
-        String confirmPassword = user.getConfirmPassword();
         String role = user.getRole();
         Optional<User> optionalPresentUser = userService.getByLoginOrEmail(login, email);
         if (email.isEmpty() || login.isEmpty() || password.isEmpty() || role == null) {
@@ -63,12 +65,12 @@ public class UserController {
                 Basket basket = new Basket(optionalNewUser.get());
                 basketService.add(basket);
             }
-            return new ModelAndView("redirect:/admin/users");
+            return new ModelAndView("redirect:/admin/user");
         }
         return new ModelAndView("addUser", model);
     }
 
-    @GetMapping("/change/user/{id}")
+    @GetMapping("/change/{id}")
     public String showEditUserPage(@PathVariable("id") Long id, Model model) {
         Optional<User> optionalUser = userService.getById(id);
         if (optionalUser.isPresent()) {
@@ -78,12 +80,13 @@ public class UserController {
         return "change_user";
     }
 
-    @PostMapping("/change/user")
-    public String applyEditUser(@ModelAttribute("user") User user, ModelMap model) {
+    @PostMapping("/change")
+    public String applyEditUser(@ModelAttribute("user") User user,
+                                @RequestParam("confirmPassword") String confirmPassword,
+                                ModelMap model) {
         String login = user.getLogin();
         String email = user.getEmail();
         String password = user.getPassword();
-        String confirmPassword = user.getConfirmPassword();
         String role = user.getRole();
         if (email.isEmpty() || login.isEmpty() || password.isEmpty() || role.isEmpty()) {
             model.addAttribute("error", "Empty fields!");
@@ -93,14 +96,14 @@ public class UserController {
             model.addAttribute("user", user);
         } else {
             userService.update(user);
-            return "redirect:/admin/users";
+            return "redirect:/admin/user";
         }
         return "change_user";
     }
 
-    @GetMapping("/delete/user/{id}")
+    @GetMapping("/delete/{id}")
     public String removeUser(@PathVariable("id") Long id) {
         userService.remove(id);
-        return "redirect:/admin/users";
+        return "redirect:/admin/user";
     }
 }

@@ -1,5 +1,7 @@
 package com.controller;
 
+import com.model.Basket;
+import com.model.Product;
 import com.model.User;
 import com.service.BasketService;
 import com.service.ProductService;
@@ -9,13 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
+@SessionAttributes("user")
 public class InitController {
 
     private UserService userService;
@@ -31,21 +35,26 @@ public class InitController {
         this.productService = productService;
     }
 
+    @ModelAttribute("user")
+    public User setUserToSession(User user) {
+        return user;
+    }
+
     @GetMapping("/")
     public String init() {
         return "redirect:/login";
     }
 
     @GetMapping("/login")
-    public String index(HttpSession session) {
-        session.invalidate();
+    public String index() {
         return "index";
     }
 
     @PostMapping("/login")
     public String login(@RequestParam("login") String login,
                         @RequestParam("password") String password,
-                        HttpSession session, Model model) {
+                        @ModelAttribute("user") User user,
+                        Model model) {
         String saltedPassword = "";
 
         User registeredUser = null;
@@ -56,12 +65,13 @@ public class InitController {
         }
 
         if (registeredUser != null && registeredUser.getPassword().equals(saltedPassword)) {
-            model.addAttribute("user", registeredUser);
-            session.setAttribute("user", registeredUser);
-            if ("admin".equals(registeredUser.getRole())) {
-                return "redirect:/admin/users";
+            user.setId(registeredUser.getId());
+            user.setEmail(registeredUser.getEmail());
+            user.setRole(registeredUser.getRole());
+            if ("admin".equals(user.getRole())) {
+                return "redirect:/admin/user";
             } else {
-                return "redirect:/user/products";
+                return "redirect:/user/product";
             }
         } else {
             model.addAttribute("error", "Пользователь с таким логином и паролем не найден");
@@ -69,10 +79,10 @@ public class InitController {
         }
     }
 
-    /*@GetMapping("/init")
+    @GetMapping("/init")
     public String addUser() {
-        User admin = new User("test", "test@test", "test", "test", "admin");
-        User user = new User("user", "garret.ork@gmail.com", "user", "user", "user");
+        User admin = new User("test", "test@test", "test", "admin");
+        User user = new User("user", "garret.ork@gmail.com", "user", "user");
         userService.add(admin);
         userService.add(user);
         Basket basket = new Basket(user);
@@ -85,5 +95,5 @@ public class InitController {
         Product product3 = new Product("milk", "cows", 20.90);
         productService.add(product3);
         return "index";
-    }*/
+    }
 }

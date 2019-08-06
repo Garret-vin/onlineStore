@@ -8,7 +8,7 @@
 <h1>Создание заказа</h1>
 
 <form:form action="/user/payment" method="post" modelAttribute="order">
-    <table border="1">
+    <table>
         <tr>
             <td>E-mail:</td>
             <td><form:input path="email"/></td>

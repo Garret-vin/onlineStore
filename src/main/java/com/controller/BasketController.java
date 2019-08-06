@@ -7,30 +7,41 @@ import com.service.BasketService;
 import com.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/user/product")
 public class BasketController {
 
     private BasketService basketService;
     private ProductService productService;
 
     @Autowired
-    public BasketController(BasketService basketService, ProductService productService) {
+    public BasketController(BasketService basketService,
+                            ProductService productService) {
         this.basketService = basketService;
         this.productService = productService;
     }
 
-    @GetMapping("/buy/product/{id}")
-    public String showBasketSize(@PathVariable("id") Long id, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    @GetMapping
+    public String showAllUserProducts(@SessionAttribute("user") User user,
+                                      Model model) {
+        Optional<Basket> optionalBasket = basketService.getBasketByUser(user);
+        optionalBasket.ifPresent(basket ->
+                model.addAttribute("size", basketService.size(basket)));
+        model.addAttribute("productList", productService.getAll());
+        return "products_user";
+    }
 
+    @GetMapping("/buy/{id}")
+    public String showBasketSize(@PathVariable("id") Long id,
+                                 @SessionAttribute("user") User user) {
         Product product = null;
         Optional<Product> optionalProduct = productService.getById(id);
         if (optionalProduct.isPresent()) {
@@ -44,6 +55,6 @@ public class BasketController {
         }
 
         basketService.addProduct(basket, product);
-        return "redirect:/user/products";
+        return "redirect:/user/product";
     }
 }

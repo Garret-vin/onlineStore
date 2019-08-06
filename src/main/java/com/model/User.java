@@ -30,9 +30,6 @@ public class User {
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
-    @Column(name = "confirm_password", length = 255, nullable = false)
-    private String confirmPassword;
-
     @Column(name = "role", length = 20, nullable = false)
     private String role;
 
@@ -43,11 +40,10 @@ public class User {
 
     }
 
-    public User(String login, String email, String password, String confirmPassword, String role) {
+    public User(String login, String email, String password, String role) {
         this.login = login;
         this.email = email;
         this.password = password;
-        this.confirmPassword = confirmPassword;
         this.role = role;
     }
 
@@ -83,14 +79,6 @@ public class User {
         this.password = password;
     }
 
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
     public String getRole() {
         return role;
     }
@@ -116,13 +104,12 @@ public class User {
                 Objects.equals(login, user.login) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
-                Objects.equals(confirmPassword, user.confirmPassword) &&
                 Objects.equals(role, user.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, email, password, confirmPassword, role);
+        return Objects.hash(id, login, email, password, role);
     }
 
     @Override
@@ -132,7 +119,6 @@ public class User {
                 ", login='" + login + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", confirmPassword='" + confirmPassword + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }
