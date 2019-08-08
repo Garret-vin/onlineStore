@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/user/product")
+@SessionAttributes("user")
 public class BasketController {
 
     private BasketService basketService;

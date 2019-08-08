@@ -56,7 +56,6 @@ public class InitController {
                         @ModelAttribute("user") User user,
                         Model model) {
         String saltedPassword = "";
-
         User registeredUser = null;
         Optional<User> optionalUser = userService.getByLogin(login);
         if (optionalUser.isPresent()) {
@@ -66,8 +65,11 @@ public class InitController {
 
         if (registeredUser != null && registeredUser.getPassword().equals(saltedPassword)) {
             user.setId(registeredUser.getId());
+            user.setLogin(registeredUser.getLogin());
+            user.setPassword(registeredUser.getPassword());
             user.setEmail(registeredUser.getEmail());
             user.setRole(registeredUser.getRole());
+            user.setSalt(registeredUser.getSalt());
             if ("admin".equals(user.getRole())) {
                 return "redirect:/admin/user";
             } else {

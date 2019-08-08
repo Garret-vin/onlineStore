@@ -65,8 +65,12 @@ public class UserHibDaoImpl implements UserDao {
         Session session = sessionFactory.getCurrentSession();
         TypedQuery<User> query = session.createQuery("from User where login = :login");
         query.setParameter("login", login);
-        User user = query.getSingleResult();
-        return Optional.ofNullable(user);
+        List list = query.getResultList();
+        if (list.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of((User) list.get(0));
+        }
     }
 
     @Override
