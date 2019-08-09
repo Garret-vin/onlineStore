@@ -1,6 +1,8 @@
 package com.model;
 
-import com.util.HashUtil;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,12 +11,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users", schema = "onlineshop")
 @PrimaryKeyJoinColumn(name = "id")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +37,6 @@ public class User {
 
     @Column(name = "role", length = 20, nullable = false)
     private String role;
-
-    @Column(name = "salt", nullable = false)
-    private byte[] salt = HashUtil.getRandomSalt();
 
     public User() {
 
@@ -71,10 +73,6 @@ public class User {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -87,12 +85,40 @@ public class User {
         this.role = role;
     }
 
-    public byte[] getSalt() {
-        return salt;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSalt(byte[] salt) {
-        this.salt = salt;
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> list = new ArrayList<>();
+        list.add(new SimpleGrantedAuthority(getRole()));
+        return list;
     }
 
     @Override

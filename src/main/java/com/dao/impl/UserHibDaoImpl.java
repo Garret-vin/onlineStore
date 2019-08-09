@@ -2,11 +2,11 @@ package com.dao.impl;
 
 import com.dao.UserDao;
 import com.model.User;
-import com.util.HashUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
@@ -17,17 +17,19 @@ import java.util.Optional;
 public class UserHibDaoImpl implements UserDao {
 
     private SessionFactory sessionFactory;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final Logger logger = Logger.getLogger(UserHibDaoImpl.class);
 
     @Autowired
-    public UserHibDaoImpl(SessionFactory sessionFactory) {
+    public UserHibDaoImpl(SessionFactory sessionFactory, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.sessionFactory = sessionFactory;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     public void add(User user) {
         Session session = sessionFactory.getCurrentSession();
-        String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
+        String saltedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(saltedPassword);
         session.save(user);
         logger.info(user + " was added to DB");
@@ -46,7 +48,7 @@ public class UserHibDaoImpl implements UserDao {
     @Override
     public void update(User user) {
         Session session = sessionFactory.getCurrentSession();
-        String saltedPassword = HashUtil.getSaltedPassword(user.getPassword(), user.getSalt());
+        String saltedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(saltedPassword);
         session.update(user);
         logger.info(user + " was updated in DB");

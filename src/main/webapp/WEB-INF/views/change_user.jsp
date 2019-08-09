@@ -34,12 +34,9 @@ ${error}
         <tr>
             <td>Role</td>
             <td>
-                <form:radiobutton path="role" value="admin"/> Администратор <br>
-                <form:radiobutton path="role" value="user"/> Пользователь
+                <form:radiobutton path="role" value="ROLE_ADMIN"/> Администратор <br>
+                <form:radiobutton path="role" value="ROLE_USER"/> Пользователь
             </td>
-        </tr>
-        <tr>
-            <td><form:hidden path="salt"/></td>
         </tr>
         <tr>
             <td><input type="submit" value="Подтвердить"/></td>

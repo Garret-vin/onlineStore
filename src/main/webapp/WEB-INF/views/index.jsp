@@ -9,7 +9,7 @@
 
 <div align="center">
 
-    ${error}
+    ${loginMessage}
 
     <form action='<spring:url value="/signin"/>' method="post">
         <table>
