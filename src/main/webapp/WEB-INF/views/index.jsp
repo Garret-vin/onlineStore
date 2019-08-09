@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -10,7 +11,7 @@
 
     ${error}
 
-    <form action="/login" method="post">
+    <form action='<spring:url value="/signin"/>' method="post">
         <table>
             <tr>
                 <td>Логин</td>

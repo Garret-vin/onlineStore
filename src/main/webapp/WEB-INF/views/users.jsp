@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -31,6 +32,6 @@
 </table>
 <br>
 <button><a href="/admin/product">Товары</a></button>
-<button><a href="/">Выйти</a></button>
+<button><a href='<spring:url value="/signout"/>'>Выйти</a></button>
 </body>
 </html>

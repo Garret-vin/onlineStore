@@ -8,6 +8,9 @@ import com.service.ProductService;
 import com.service.UserService;
 import com.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,15 +45,21 @@ public class InitController {
 
     @GetMapping("/")
     public String init() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        for (GrantedAuthority authority : context.getAuthentication().getAuthorities()) {
+            String role = authority.getAuthority();
+            if ("ROLE_ADMIN".equals(role)) {
+                return "redirect:/admin/user";
+            } else if ("ROLE_USER".equals(role)){
+                return "redirect:/user/product";
+            } else {
+                return "redirect:/login";
+            }
+        }
         return "redirect:/login";
     }
 
-    @GetMapping("/login")
-    public String index() {
-        return "index";
-    }
-
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public String login(@RequestParam("login") String login,
                         @RequestParam("password") String password,
                         @ModelAttribute("user") User user,
@@ -79,7 +88,7 @@ public class InitController {
             model.addAttribute("error", "Пользователь с таким логином и паролем не найден");
             return "index";
         }
-    }
+    }*/
 
     @GetMapping("/init")
     public String addUser() {
