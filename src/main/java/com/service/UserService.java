@@ -9,15 +9,15 @@ public interface UserService {
 
     void add(User user);
 
-    List<User> getAll();
+    void update(User user);
+
+    void remove(Long id);
 
     Optional<User> getById(Long id);
 
     Optional<User> getByLogin(String login);
 
-    void update(Long userId, User user);
-
-    void remove(User user);
-
     Optional<User> getByLoginOrEmail(String login, String email);
+
+    List<User> getAll();
 }

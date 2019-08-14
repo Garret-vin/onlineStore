@@ -34,26 +34,17 @@ public class User {
     private String role;
 
     @Column(name = "salt", nullable = false)
-    private byte[] salt;
+    private byte[] salt = HashUtil.getRandomSalt();
 
     public User() {
-    }
 
-    public User(Long id, String login, String email, String password, String role, byte[] salt) {
-        this.id = id;
-        this.login = login;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.salt = salt;
     }
 
     public User(String login, String email, String password, String role) {
-        this.email = email;
         this.login = login;
+        this.email = email;
         this.password = password;
         this.role = role;
-        this.salt = HashUtil.getRandomSalt();
     }
 
     public Long getId() {
@@ -125,9 +116,10 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

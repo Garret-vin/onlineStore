@@ -39,12 +39,6 @@ public class Code {
         this.value = CodeGeneratorUtil.generate();
     }
 
-    public Code(Long id, String value, User user) {
-        this.id = id;
-        this.user = user;
-        this.value = value;
-    }
-
     public Long getId() {
         return id;
     }

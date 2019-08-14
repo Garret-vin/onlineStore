@@ -55,16 +55,6 @@ public class Order {
         this.address = address;
     }
 
-    public Order(Long id, Basket basket, User user, Code code, String email, String phoneNumber, String address) {
-        this.id = id;
-        this.basket = basket;
-        this.user = user;
-        this.code = code;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-    }
-
     public Long getId() {
         return id;
     }

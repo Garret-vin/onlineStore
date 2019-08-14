@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -8,18 +9,45 @@
 
 ${error}
 
-<form action="/admin/change/user?id=${userId}" method="post">
-    Login <input type="text" name="login" value="${enteredLogin}"> <br>
-    E-mail <input type="email" name="email" value="${enteredEmail}"> <br>
-    Password <input type="password" name="password" value="${enteredPassword}"> <br>
-    Confirm password <input type="password" name="confirm" value="${enteredConfirm}"> <br>
-    Выберите роль:<br>
-    <input type="radio" name="role" value="user">Пользователь<br>
-    <input type="radio" name="role" value="admin">Администратор<br>
-    <input type="submit" value="Подтвердить">
-</form>
+<form:form action="/admin/user/change"
+           method="post" modelAttribute="user">
+    <table>
+        <tr>
+            <td><form:hidden path="id"/></td>
+        </tr>
+        <tr>
+            <td>Login</td>
+            <td><form:input path="login"/></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><form:input path="email"/></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><form:password path="password"/></td>
+        </tr>
+        <tr>
+            <td>Confirm Password</td>
+            <td><input type="password" name="confirmPassword"/></td>
+        </tr>
+        <tr>
+            <td>Role</td>
+            <td>
+                <form:radiobutton path="role" value="admin"/> Администратор <br>
+                <form:radiobutton path="role" value="user"/> Пользователь
+            </td>
+        </tr>
+        <tr>
+            <td><form:hidden path="salt"/></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Подтвердить"/></td>
+        </tr>
+    </table>
+</form:form>
 
-<button><a href="/admin/users">Вернуться</a></button>
+<button><a href="/admin/user">Вернуться</a></button>
 
 </body>
 </html>

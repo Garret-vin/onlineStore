@@ -8,11 +8,10 @@
 
 
 <p>Количество товара в корзине: ${size} <br>
-    <button><a href="/payment">Корзина</a></button>
+    <button><a href="/user/payment">Корзина</a></button>
 </p>
 
 <table border="1">
-
     <tr>
         <th>Наименование</th>
         <th>Описание</th>
@@ -23,10 +22,9 @@
             <td>${product.name}</td>
             <td>${product.description}</td>
             <td>${product.price}</td>
-            <td><a href="/user/buy?id=${product.id}">Купить</a></td>
+            <td><a href="/user/product/buy/${product.id}">Купить</a></td>
         </tr>
     </c:forEach>
-
 </table>
 <br>
 <button><a href="/login">Выйти</a></button>

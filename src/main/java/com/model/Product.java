@@ -46,13 +46,6 @@ public class Product {
         this.price = price;
     }
 
-    public Product(Long id, String name, String description, Double price) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
-
     public Long getId() {
         return id;
     }
@@ -101,13 +94,12 @@ public class Product {
         return Objects.equals(id, product.id) &&
                 Objects.equals(name, product.name) &&
                 Objects.equals(description, product.description) &&
-                Objects.equals(price, product.price) &&
-                Objects.equals(basketList, product.basketList);
+                Objects.equals(price, product.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, basketList);
+        return Objects.hash(id, name, description, price);
     }
 
     @Override
